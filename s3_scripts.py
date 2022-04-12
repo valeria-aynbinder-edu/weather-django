@@ -29,8 +29,8 @@ from botocore.exceptions import ClientError, BotoCoreError
 # for bucket in response['Buckets']:
 #     print(f'  {bucket["Name"]}')
 
-# environment variables or .aws/credentials
-# Output the bucket names
+# # environment variables or .aws/credentials
+# # Output the bucket names
 s3_client = boto3.client('s3')
 response = s3_client.list_buckets()
 print('Existing buckets:')
@@ -38,14 +38,19 @@ for bucket in response['Buckets']:
     print(f'  {bucket["Name"]}')
 
 
-# creating resource
+# secrets_client = boto3.client('secretsmanager', region_name = "us-east-1")
+# response = secrets_client.get_secret_value(SecretId='mysecret')
+# print("done")
+#
+#
+# # creating resource
 s3 = boto3.resource('s3')
 print("Listing buckets using resource")
 for bucket in s3.buckets.all():
     print(bucket)
-
-
-# list objects
+#
+#
+# # list objects
 my_csv_file = None
 s3 = boto3.resource('s3')
 my_bucket = s3.Bucket('valeria123')
@@ -55,13 +60,13 @@ for o in my_bucket.objects.all():
         my_csv_file = o.key
         print("found csv: ", my_csv_file)
 print("done")
-
-
-# download file
+#
+#
+# # download file
 s3_client.download_file('valeria123', my_csv_file, 'temp.csv')
 print(f"downloaded {my_csv_file} to temp.csv")
-
-# as stream - user resource
+#
+# # as stream - user resource
 file_obj = s3.Object('valeria123', my_csv_file)
 file_content = file_obj.get()['Body'].read()
 
@@ -78,7 +83,7 @@ for i, line in enumerate(file_obj.get()['Body'].iter_lines()):
 
 # upload file
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html#uploading-files
-response = s3_client.upload_file('requirements.txt', 'valeria123', 'code/requirements.txt')
+response = s3_client.upload_file('requirements.txt', 'valeria123', 'my_code/abc/requirements.txt')
 print('Successfully uploaded')
 
 # need to add write permissions
